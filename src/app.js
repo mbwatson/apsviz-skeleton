@@ -1,11 +1,14 @@
 import { Layout } from './components/layout'
-import { UI } from './ui'
+import { BaseMap } from './components/map'
+import { LayersProvider } from './context'
 
 export const App = () => {
   return (
-    <Layout>
-      <UI />
-    </Layout>
+    <LayersProvider>
+      <Layout>
+        <BaseMap />
+      </Layout>
+    </LayersProvider>
   )
 }
 
