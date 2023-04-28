@@ -1,36 +1,34 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
-import PropTypes from 'prop-types'
-import { Button, Dialog as MuiDialog, DialogContent } from "@mui/material";
+import React, { useMemo } from "react";
+import { Dialog as MuiDialog } from "@mui/material";
 import { useLayout } from "../layout";
-import { SynopticLayerSelectionForm, TropicalLayerSelectionForm } from './forms'
+import { AdcircForm, EcflowForm } from './forms'
 
-export const SelectionDialog = ({ children }) => {
+const DIALOGS = {
+  'adcirc': <AdcircForm />,
+  'ec-flow': <EcflowForm />,
+}
+
+export const SelectionDialog = () => {
   const { activeDialog, dialogIsOpen, closeDialog } = useLayout();
 
-  const DialogContents = useCallback(() => {
-    if (activeDialog === 'ADCIRC') {
-      return <SynopticLayerSelectionForm />
+  const DialogContents = useMemo(() => {
+    if (!activeDialog) {
+      return <div>An error occurred.</div>
     }
-    if (activeDialog === 'EC FLOW') {
-      return <TropicalLayerSelectionForm />
-    }
-    return 'none'
+    return DIALOGS[activeDialog]
   }, [activeDialog])
 
   return (
     <MuiDialog
       open={dialogIsOpen}
       onClose={closeDialog}
-      sx={{ zIndex: 999 }}
+      fullWidth
+      maxWidth="md"
+      PaperProps={{ sx: {
+        minHeight: '600px',
+      } }}
     >
-      <DialogContent>
-        <DialogContents />
-      </DialogContent>
+      {DialogContents}
     </MuiDialog>
   );
 };
-
-
-SelectionDialog.propTypes = {
-  children: PropTypes.node,
-}

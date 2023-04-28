@@ -18,13 +18,13 @@ export const LayerSelectionMenu = () => {
 
   const menuItems = [
     {
-      name: "ADCIRC",
-      action: handleClickOpenDialog,
+      id: 'adcirc',
+      label: "ADCIRC",
       icon: <StormIcon />
     },
     {
-      name: "EC FLOW",
-      action: handleClickOpenDialog,
+      id: 'ec-flow',
+      label: "EC-FLOW",
       icon: <ThunderstormIcon />
     }
   ];
@@ -52,11 +52,11 @@ export const LayerSelectionMenu = () => {
       >
         {menuItems.map((item) => (
           <SpeedDialAction
-            key={item.name}
-            onClick={item.action}
+            key={item.label}
+            onClick={handleClickOpenDialog}
             icon={item.icon}
-            data-source={item.name}
-            tooltipTitle={item.name}
+            data-source={item.id}
+            tooltipTitle={item.label}
             tooltipPlacement="right"
           />
         ))}

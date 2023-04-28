@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Drawer } from './drawer'
 import { LayerSelectionMenu, SelectionDialog } from './layer-selection'
