@@ -54,9 +54,9 @@ export const AdcircForm = () => {
           onChange={handleClickTab}
           aria-label="Run type selection"
           sx={{ '.MuiTabs-scroller': {
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'stretch',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'stretch',
           } }}
         >
           {LAYER_TYPES.map(({ id, label }) => (

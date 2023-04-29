@@ -25,7 +25,7 @@ export const SelectionDialog = () => {
       fullWidth
       maxWidth="md"
       PaperProps={{ sx: {
-        minHeight: '600px',
+        minHeight: '400px',
       } }}
     >
       {DialogContents}
