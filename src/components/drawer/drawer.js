@@ -68,7 +68,7 @@ export const Drawer = () => {
         className="toggler"
         color="primary"
         variant="contained"
-      >- { selectedLayers.length } -</Button>
+      >- { selectedLayers.length } layers selected -</Button>
       
       <Stack direction={{ xs: 'column', md: 'row' }} className="content">
         <Box className="layers-list">

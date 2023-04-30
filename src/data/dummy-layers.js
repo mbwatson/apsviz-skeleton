@@ -9,14 +9,22 @@ import {
   randomStormName,
 } from './util'
 
+const randomDate = () => {
+  const theDate = faker.date.past()
+  const mm = theDate.getMonth() < 9 ? `0${ theDate.getMonth() + 1}` : theDate.getMonth()
+  const dd = theDate.getDate() < 9 ? `0${ theDate.getDate() }` : theDate.getDate()
+  const yyyy = theDate.getFullYear() < 9 ? `0${ theDate.getFullYear() }` : theDate.getFullYear()
+  const dateString = `${mm}/${dd}/${yyyy}`
+  return dateString
+}
+
 const layerGenerator = n => {
   return [...Array(n).keys()].map(() => ({
     id:         faker.datatype.uuid(),
     name:       faker.lorem.sentence(2),
-    visible:   false,
     opacity:    1.0,
     color:      randomColor(),
-    date:       faker.date.past(),
+    date:       randomDate(),
     cycle:      randomCycle(),
     grid:       randomGrid(),
     advisory:   randomAdvisory(),
@@ -28,4 +36,4 @@ const layerGenerator = n => {
 
 
 export const dummyLayers = layerGenerator(100)
-console.log(dummyLayers)
+console.table(dummyLayers)

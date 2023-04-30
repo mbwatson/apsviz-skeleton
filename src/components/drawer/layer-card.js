@@ -1,17 +1,16 @@
 import { useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { Box, Checkbox, Card, CardContent, IconButton } from '@mui/material'
+import { Card, CardActionArea, CardActions, IconButton, Typography } from '@mui/material'
 import {
   Close as CloseIcon,
-  VisibilityOff as HiddenIcon,
   ChevronRight as InspectIcon,
-  Visibility as VisibleIcon,
+  Map as OnMapIcon,
   Delete as DeselectIcon,
 } from '@mui/icons-material'
 import { useLayers } from '../../context'
 
-export const LayerCard = ({ id, title, clickHandler, visible }) => {
-  const { activeLayerId, setActiveLayerId, toggleLayerSelection } = useLayers()
+export const LayerCard = ({ id, title }) => {
+  const { activeLayerId, setActiveLayerId, toggleLayerSelection, layerIsVisible, toggleLayerVisibility } = useLayers()
 
   const currentlyActive = useMemo(() => id == activeLayerId, [activeLayerId])
 
@@ -21,48 +20,54 @@ export const LayerCard = ({ id, title, clickHandler, visible }) => {
       backgroundColor: currentlyActive ? 'white' : 'darkgrey',
       color: currentlyActive ? '#000c' : '#fffc',
       transition: 'background-color 250ms, color 500ms',
-      position: 'relative',
       display: 'flex',
       '.actions': {
+        padding: 0,
+        gap: 0,
         backgroundColor: '#fff3',
-        position: 'absolute',
-        top: 0,
-        right: 0,
         '.MuiButtonBase-root': {
           borderRadius: 0,
-          width: '50px',
-          height: '50px',
+          m: 0,
+          width: '40px',
+          height: '45px',
+          '& .selection-icon': {
+            transition: 'color 250ms',
+          },
+          '&:hover .selection-icon': {
+            color: 'crimson',
+          }
         },
       },
     }}>
-      <Checkbox
-        label={ `Select layer: ${ title }` }
-        className="checkbox"
-        icon={ <HiddenIcon /> }
-        checkedIcon={ <VisibleIcon /> }
-        data-layer={ id }
-        onChange={ clickHandler }
-        checked={ visible }
-      />
-      <CardContent>
-        { title }
-      </CardContent>
-      <Box className="actions">
-        <IconButton onClick={ () => toggleLayerSelection(id) }>
-          <DeselectIcon color="warning" fontSize="small" />
+      <CardActions className="actions">
+        <IconButton onClick={ () => toggleLayerVisibility(id) }>
+          <OnMapIcon color={ layerIsVisible(id) ? 'primary' : 'disabled' } />
         </IconButton>
+        <IconButton onClick={ () => toggleLayerSelection(id) }>
+          <DeselectIcon color="disabled" fontSize="small" className="selection-icon" />
+        </IconButton>
+      </CardActions>
+      <CardActionArea
+        className="actionArea"
+        onClick={ () => currentlyActive ? setActiveLayerId(null) : setActiveLayerId(id) }
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '0.5rem',
+          px: 1,
+        }}
+      >
+        <Typography>{ title }</Typography>
         {
           currentlyActive ? (
-            <IconButton onClick={ () => setActiveLayerId(null) }>
               <CloseIcon color="warning" fontSize="small" />
-            </IconButton>
           ) : (
-            <IconButton onClick={ () => setActiveLayerId(id) }>
               <InspectIcon />
-            </IconButton>
           )
         }
-      </Box>
+      </CardActionArea>
     </Card>
   )
 }
@@ -70,6 +75,4 @@ export const LayerCard = ({ id, title, clickHandler, visible }) => {
 LayerCard.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  clickHandler: PropTypes.func.isRequired,
-  visible: PropTypes.bool.isRequired,
 }

@@ -3,7 +3,8 @@ import {
   List, ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip,
 } from '@mui/material'
 import {
-  Map as OnMapIcon,
+  Remove as SelectedLayerIcon,
+  Add as UnselectedLayerIcon,
 } from '@mui/icons-material'
 import { useLayers } from '../../../../context'
 
@@ -16,19 +17,22 @@ export const Match = props => {
         <ListItem disablePadding>
           <ListItemButton onClick={ () => toggleLayerSelection(id) }>
             <ListItemText
-              primary={ name } primaryTypographyProps={{ color: 'primary' }}
+              primary={ name }
+              primaryTypographyProps={{
+                color: layerIsSelected(id) ? 'primary' : 'grey'
+              }}
             />
             {
               layerIsSelected(id) ? (
-                <Tooltip title="Click to add to map" placement="left">
+                <Tooltip title="Click to remove from tray" placement="left">
                   <ListItemIcon>
-                    <OnMapIcon color="primary" />
+                    <SelectedLayerIcon color="primary" />
                   </ListItemIcon>
                 </Tooltip>
               ) : (
-                <Tooltip title="Click to remove from map" placement="left">
+                <Tooltip title="Click to add to tray" placement="left">
                   <ListItemIcon>
-                    <OnMapIcon color="disabled" />
+                    <UnselectedLayerIcon color="default" />
                   </ListItemIcon>
                 </Tooltip>
               )

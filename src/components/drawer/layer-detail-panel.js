@@ -14,10 +14,10 @@ const GeneralDetails = () => {
       height: '100%',
     }}>
       <Typography paragraph>
-        { selectedLayers.length } layers are selected.
+        selected layers: { selectedLayers.length }
       </Typography>
       <Typography paragraph>
-        { visibleLayers.length } layers are visible.
+        visible layers: { visibleLayers.length }
       </Typography>
     </Box>
   )
@@ -38,12 +38,12 @@ const ActiveLayerDetails = () => {
       alignItems="stretch"
       sx={{
         height: '100%',
-        // border: '4px dashed crimson',
         overflow: 'hidden',
         '.main-content': {
           margin: 0,
           overflowY: 'auto',
           flex: 1,
+          p: 1,
         },
         '.slider-container': {
           backgroundColor: 'lightgrey',

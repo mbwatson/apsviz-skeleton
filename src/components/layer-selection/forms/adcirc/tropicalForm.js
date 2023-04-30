@@ -42,6 +42,7 @@ export const TropicalLayerSelectionForm = () => {
 
   const submitHandler = () => {
     const data = new FormData(formRef.current)
+    console.log(data)
     setFilteredLayers(filterLayers(data))
   }
 
