@@ -8,7 +8,7 @@ const LayoutContext = createContext({ })
 export const useLayout = () => useContext(LayoutContext)
 
 export const Layout = ({ children }) => {
-  const [drawerIsOpen, setDrawerIsOpen] = useState(true)
+  const [drawerIsOpen, setDrawerIsOpen] = useState(false)
   const closeDrawer = () => setDrawerIsOpen(false)
   const toggleDrawer = () => setDrawerIsOpen(!drawerIsOpen)
 

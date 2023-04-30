@@ -16,6 +16,11 @@ export const randomColor = () => {
   return hslString;
 }
 
+const randomArrayItem = array => {
+  const index = Math.floor(Math.random() * array.length)
+  return array[index]
+}
+
 export const gridOptions = [
   'ec95d',
   'EGOMv20b',
@@ -26,10 +31,7 @@ export const gridOptions = [
   'NCSC_SAB_v1.23',
 ]
 
-export const randomGrid = () => {
-  const index = Math.floor(Math.random() * gridOptions.length)
-  return gridOptions[index]
-}
+export const randomGrid = () => randomArrayItem(gridOptions)
 
 export const cycleOptions = [
   '0',
@@ -38,10 +40,7 @@ export const cycleOptions = [
   '18',
 ]
 
-export const randomCycle = () => {
-  const index = Math.floor(Math.random() * 4)
-  return cycleOptions[index]
-}
+export const randomCycle = () => randomArrayItem(cycleOptions)
 
 export const instanceOptions = [
   '062018hiresr',
@@ -58,6 +57,8 @@ export const instanceOptions = [
   'ncsc123-nam-sbDNTKa',
 ]
 
+export const randomInstance = () => randomArrayItem(instanceOptions)
+
 export const stormNameOptions = [
   'DANIELLE',
   'EARL',
@@ -66,6 +67,9 @@ export const stormNameOptions = [
   'NICOLE',
   'SEVEN',
 ]
+export const randomStormName = () => randomArrayItem(stormNameOptions)
 
 export const advisoryOptions = [...Array(36).keys()]
   .map(i => i.toString().padStart(2, '0'))
+
+export const randomAdvisory = () => randomArrayItem(advisoryOptions)

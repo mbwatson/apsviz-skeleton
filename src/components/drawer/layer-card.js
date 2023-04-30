@@ -6,11 +6,12 @@ import {
   VisibilityOff as HiddenIcon,
   ChevronRight as InspectIcon,
   Visibility as VisibleIcon,
+  Delete as DeselectIcon,
 } from '@mui/icons-material'
 import { useLayers } from '../../context'
 
-export const LayerCard = ({ id, title, clickHandler, selected }) => {
-  const { activeLayerId, setActiveLayerId } = useLayers()
+export const LayerCard = ({ id, title, clickHandler, visible }) => {
+  const { activeLayerId, setActiveLayerId, toggleLayerSelection } = useLayers()
 
   const currentlyActive = useMemo(() => id == activeLayerId, [activeLayerId])
 
@@ -21,6 +22,7 @@ export const LayerCard = ({ id, title, clickHandler, selected }) => {
       color: currentlyActive ? '#000c' : '#fffc',
       transition: 'background-color 250ms, color 500ms',
       position: 'relative',
+      display: 'flex',
       '.actions': {
         backgroundColor: '#fff3',
         position: 'absolute',
@@ -28,23 +30,27 @@ export const LayerCard = ({ id, title, clickHandler, selected }) => {
         right: 0,
         '.MuiButtonBase-root': {
           borderRadius: 0,
-          width: '40px'
+          width: '50px',
+          height: '50px',
         },
       },
     }}>
+      <Checkbox
+        label={ `Select layer: ${ title }` }
+        className="checkbox"
+        icon={ <HiddenIcon /> }
+        checkedIcon={ <VisibleIcon /> }
+        data-layer={ id }
+        onChange={ clickHandler }
+        checked={ visible }
+      />
       <CardContent>
         { title }
       </CardContent>
       <Box className="actions">
-        <Checkbox
-          label={ `Select layer: ${ title }` }
-          className="checkbox"
-          icon={ <HiddenIcon /> }
-          checkedIcon={ <VisibleIcon /> }
-          data-layer={ id }
-          onChange={ clickHandler }
-          checked={ selected }
-        />
+        <IconButton onClick={ () => toggleLayerSelection(id) }>
+          <DeselectIcon color="warning" fontSize="small" />
+        </IconButton>
         {
           currentlyActive ? (
             <IconButton onClick={ () => setActiveLayerId(null) }>
@@ -65,5 +71,5 @@ LayerCard.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   clickHandler: PropTypes.func.isRequired,
-  selected: PropTypes.bool.isRequired,
+  visible: PropTypes.bool.isRequired,
 }

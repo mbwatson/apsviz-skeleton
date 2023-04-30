@@ -3,7 +3,7 @@ import { LayerCard } from './layer-card'
 import { useLayers } from '../../context'
 
 export const LayersListPanel = () => {
-  const { layers, toggleLayerSelection } = useLayers()
+  const { selectedLayers, toggleLayerVisibility } = useLayers()
 
   return (
     <Stack
@@ -19,13 +19,13 @@ export const LayersListPanel = () => {
       }}
     >
       {
-        layers.map(({ id, name, selected }) => (
+        selectedLayers.map(({ id, name, visible }) => (
           <LayerCard
             key={ `layer-card-${ id }` }
             id={ id }
             title={ name }
-            selected={ selected }
-            clickHandler={ toggleLayerSelection(id) }
+            visible={ visible }
+            clickHandler={ toggleLayerVisibility(id) }
           />
         ))
       }

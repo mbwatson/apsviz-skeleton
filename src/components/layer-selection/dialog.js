@@ -23,9 +23,12 @@ export const SelectionDialog = () => {
       open={dialogIsOpen}
       onClose={closeDialog}
       fullWidth
-      maxWidth="md"
+      maxWidth="sm"
       PaperProps={{ sx: {
         minHeight: '400px',
+        '.MuiDialogContent-root': { // scrolling the results instead, so don't scroll dialog content container
+          overflowY: 'hidden',
+        }
       } }}
     >
       {DialogContents}

@@ -1,9 +1,9 @@
 import { Box, Button, Drawer as MuiDrawer, Stack, useMediaQuery, useTheme } from '@mui/material'
 
 import { useLayout } from '../layout'
-
 import { LayersListPanel } from './layers-list-panel'
 import { LayerDetailPanel } from './layer-detail-panel'
+import { useLayers } from '../../context'
 
 //
 
@@ -15,6 +15,7 @@ const DRAWER_MAX_HEIGHT = '400px'
 export const Drawer = () => {
   const theme = useTheme();
   const { closeDrawer, drawerIsOpen, toggleDrawer } = useLayout();
+  const { selectedLayers } = useLayers()
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
@@ -67,7 +68,7 @@ export const Drawer = () => {
         className="toggler"
         color="primary"
         variant="contained"
-      >- - -</Button>
+      >- { selectedLayers.length } -</Button>
       
       <Stack direction={{ xs: 'column', md: 'row' }} className="content">
         <Box className="layers-list">

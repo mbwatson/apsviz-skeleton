@@ -4,7 +4,14 @@ import { useLayers } from '../context'
 //
 
 export const BaseMap = () => {
-  const { selectedLayers } = useLayers()
+  const { visibleLayers } = useLayers()
+
+  const replacer = (key, value) => {
+    if (key === 'data') {
+      return 'OMITTED FOR SPACE'
+    }
+    return value
+  }
 
   return (
     <Box sx={{
@@ -17,14 +24,14 @@ export const BaseMap = () => {
       height: '100%',
     }}>
       {
-        selectedLayers.map((layer, i) => (
+        visibleLayers.map((layer, i) => (
           <Box
             key={ `map-layer-${ layer.id }` }
             component="pre"
             sx={{
               filter: `opacity(${ layer.opacity })`,
               position: 'absolute',
-              top: '5rem',
+              top: '15%',
               left: '25%',
               backgroundColor: layer.color,
               border: '2px solid #222',
@@ -33,10 +40,12 @@ export const BaseMap = () => {
               transition: 'transform 250ms',
             }}
           >
-            { JSON.stringify(layer, null, 2) }
+            { JSON.stringify(layer, replacer, 2) }
           </Box>
         ))
       }
     </Box>
   )
 }
+
+            // { JSON.stringify(layer, ['id', 'name', 'opacity', 'date', 'cycle', 'grid', 'advisory', 'stormName', 'instance' ], 2) }

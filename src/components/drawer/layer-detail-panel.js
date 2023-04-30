@@ -1,18 +1,24 @@
-import { Box, Slider, Stack } from '@mui/material'
+import { Box, Slider, Stack, Typography } from '@mui/material'
 import { useLayers } from '../../context'
 
 //
 
 const GeneralDetails = () => {
-  const { layers, selectedLayers } = useLayers()
+  const { selectedLayers, visibleLayers } = useLayers()
   return (
     <Box sx={{
       display: 'flex',
+      flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
       height: '100%',
     }}>
-      { selectedLayers.length } / { layers.length } selected layers are visible
+      <Typography paragraph>
+        { selectedLayers.length } layers are selected.
+      </Typography>
+      <Typography paragraph>
+        { visibleLayers.length } layers are visible.
+      </Typography>
     </Box>
   )
 }

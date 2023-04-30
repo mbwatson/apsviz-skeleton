@@ -4,11 +4,11 @@ import { useLayers } from '../../context'
 import { LineGraph } from '../graph'
 
 export const LayersGraphPanel = ({ graphHeight }) => {
-  const { layers, selectedLayers } = useLayers()
+  const { layers, visibleLayers } = useLayers()
 
   const data = useMemo(() => {
-    return selectedLayers
-  }, [selectedLayers])
+    return visibleLayers
+  }, [visibleLayers])
 
   return (
     <LineGraph data={ data } height={ graphHeight }/>

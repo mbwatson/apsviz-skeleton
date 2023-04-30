@@ -1,6 +1,6 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import {
-  Button, Stack,
+  Button, Divider, Stack,
 } from '@mui/material'
 import { FormProvider, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -11,9 +11,13 @@ import {
   GridField,
   InstanceField,
 } from './fields'
+import { useLayers } from '../../../../context'
+import { Match } from './match'
 
 export const TropicalLayerSelectionForm = () => {
   const formRef = useRef()
+  const { layers } = useLayers()
+  const [filteredLayers, setFilteredLayers] = useState([])
 
   const methods = useForm({
     schema,
@@ -21,9 +25,24 @@ export const TropicalLayerSelectionForm = () => {
     defaultValues: { ...defaults },
   })
 
+  const filterLayers = filter => {
+    const filterObj = Object.fromEntries(filter)
+
+    if (Object.values(filterObj).join('') === '') {
+      return layers
+    }
+
+    return layers.filter(layer => (
+      layer.date === filterObj.date
+        || layer.cycle === filterObj.cycle
+        || layer.grid === filterObj.grid
+        || layer.instance === filterObj.instance
+      ))
+  }
+
   const submitHandler = () => {
     const data = new FormData(formRef.current)
-    console.log(data)
+    setFilteredLayers(filterLayers(data))
   }
 
   return (
@@ -37,6 +56,21 @@ export const TropicalLayerSelectionForm = () => {
           variant="contained"
           onClick={ submitHandler }
         >Search</Button>
+      </Stack>
+      
+      <br />
+      <Divider />
+      <br />
+      
+      <Stack sx={{ maxHeight: '400px', overflow: 'auto' }}>
+        {
+          filteredLayers.map(layer => (
+            <Match
+              key={ `result-${ layer.id}` }
+              { ...layer }
+            />
+          ))
+        }
       </Stack>
     </FormProvider>
   )
