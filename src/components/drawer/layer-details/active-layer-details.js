@@ -1,31 +1,10 @@
-import { Box, Slider, Stack, Typography } from '@mui/material'
-import { useLayers } from '../../context'
+import { Box, Slider, Stack, Tab, Tabs, Typography } from '@mui/material'
+import { useLayers } from '../../../context'
+import { GeneralDetails } from './general-details'
 
 //
 
-const GeneralDetails = () => {
-  const { selectedLayers, visibleLayers } = useLayers()
-  return (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100%',
-    }}>
-      <Typography paragraph>
-        selected layers: { selectedLayers.length }
-      </Typography>
-      <Typography paragraph>
-        visible layers: { visibleLayers.length }
-      </Typography>
-    </Box>
-  )
-}
-
-//
-
-const ActiveLayerDetails = () => {
+export const ActiveLayerDetails = () => {
   const { activeLayer, getLayerOpacity, setLayerOpacity } = useLayers()
 
   const handleChangeOpacity = (event, value) => {
@@ -70,14 +49,4 @@ const ActiveLayerDetails = () => {
       </Box>
     </Stack>
   )
-}
-
-//
-
-export const LayerDetailPanel = () => {
-  const { activeLayerId } = useLayers()
-
-  return activeLayerId
-    ? <ActiveLayerDetails />
-    : <GeneralDetails />
 }

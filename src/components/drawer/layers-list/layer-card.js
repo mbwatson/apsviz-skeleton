@@ -7,7 +7,7 @@ import {
   Map as OnMapIcon,
   Delete as DeselectIcon,
 } from '@mui/icons-material'
-import { useLayers } from '../../context'
+import { useLayers } from '../../../context'
 
 export const LayerCard = ({ id, title }) => {
   const { activeLayerId, setActiveLayerId, toggleLayerSelection, layerIsVisible, toggleLayerVisibility } = useLayers()
