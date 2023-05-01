@@ -11,7 +11,7 @@ const stringifyReplacer = (key, value) => {
 }
 
 export const BaseMap = () => {
-  const { visibleLayers } = useLayers()
+  const { visibleLayers, setActiveLayerId } = useLayers()
 
   return (
     <Box sx={{
@@ -42,16 +42,21 @@ export const BaseMap = () => {
           <Box
             key={ `map-layer-${ layer.id }` }
             component="pre"
+            onClick={ () => setActiveLayerId(layer.id) }
             sx={{
               filter: `opacity(${ layer.opacity })`,
               position: 'absolute',
               top: '15%',
               left: '25%',
               backgroundColor: layer.color,
-              border: '2px solid #222',
+              border: 'solid #444',
               padding: '8px',
               transform: `perspective(1000px) translate3d(${(i + 1) * 3}rem, ${(i + 1) * 2}rem, 0) rotateX(-30deg) rotateY(30deg)`,
               transition: 'transform 250ms',
+              cursor: 'pointer',
+              '&:hover': {
+                borderColor: 'crimson',
+              },
             }}
           >
             { JSON.stringify(layer, stringifyReplacer, 2) }
