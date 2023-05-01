@@ -1,4 +1,5 @@
 {
+  "homepage": "https://mbwatson.github.io/apsviz-skeleton",
   "private": "true",
   "scripts": {
     "start": "SERVE=true webpack serve",
