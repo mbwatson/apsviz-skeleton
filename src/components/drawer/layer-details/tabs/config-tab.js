@@ -1,31 +1,7 @@
-import { Box, Slider, Stack, Typography } from '@mui/material'
-import { useLayers } from '../../context'
+import { Box, Slider, Stack } from '@mui/material'
+import { useLayers } from '../../../../context'
 
-//
-
-const GeneralDetails = () => {
-  const { selectedLayers, visibleLayers } = useLayers()
-  return (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100%',
-    }}>
-      <Typography paragraph>
-        selected layers: { selectedLayers.length }
-      </Typography>
-      <Typography paragraph>
-        visible layers: { visibleLayers.length }
-      </Typography>
-    </Box>
-  )
-}
-
-//
-
-const ActiveLayerDetails = () => {
+export const ConfigTab = () => {
   const { activeLayer, getLayerOpacity, setLayerOpacity } = useLayers()
 
   const handleChangeOpacity = (event, value) => {
@@ -52,9 +28,12 @@ const ActiveLayerDetails = () => {
         }
       }}
     >
-      <pre className="main-content">
-        { JSON.stringify(activeLayer, null, 2) }
-      </pre>
+      <Box className="main-content">
+        <strong>configuration options</strong> <br />
+        opacity control: --&gt; <br />
+        color map adjustment: tbd <br />
+        other: ? <br />
+      </Box>
       <Box className="slider-container">
         <Slider
           aria-label="Opacity"
@@ -70,14 +49,4 @@ const ActiveLayerDetails = () => {
       </Box>
     </Stack>
   )
-}
-
-//
-
-export const LayerDetailPanel = () => {
-  const { activeLayerId } = useLayers()
-
-  return activeLayerId
-    ? <ActiveLayerDetails />
-    : <GeneralDetails />
 }

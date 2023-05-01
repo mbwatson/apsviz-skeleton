@@ -1,8 +1,8 @@
 import { Stack } from '@mui/material'
 import { LayerCard } from './layer-card'
-import { useLayers } from '../../context'
+import { useLayers } from '../../../context'
 
-export const LayersListPanel = () => {
+export const LayersList = () => {
   const { selectedLayers } = useLayers()
 
   return (
