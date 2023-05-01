@@ -52,7 +52,7 @@ export const BaseMap = () => {
               border: 'solid #444',
               padding: '8px',
               transform: `perspective(1000px) translate3d(${(i + 1) * 3}rem, ${(i + 1) * 2}rem, 0) rotateX(-30deg) rotateY(30deg)`,
-              transition: 'transform 250ms',
+              transition: 'transform 250ms, border-color 250ms',
               cursor: 'pointer',
               '&:hover': {
                 borderColor: 'crimson',

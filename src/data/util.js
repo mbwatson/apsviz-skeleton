@@ -1,9 +1,3 @@
-export const randomPoints = n => {
-  const span = Math.floor(Math.random() * 50)
-  const min = Math.floor(Math.random() * 50)
-  return [...Array(n).keys()].map(i => ({ x: i , y: Math.floor(Math.random() * span) + min }))
-}
-
 export const randomColor = () => {
   const hue = Math.floor(Math.random() * 360);
   const saturation = Math.floor(Math.random() * 100);
@@ -14,6 +8,20 @@ export const randomColor = () => {
 
   // Return the HSL string
   return hslString;
+}
+
+export const randomPoints = n => {
+  const span = Math.floor(Math.random() * 50)
+  const min = Math.floor(Math.random() * 50)
+  return [...Array(n).keys()].map(i => ({ x: i , y: Math.floor(Math.random() * span) + min }))
+}
+
+export const randomData = (n, m) => {
+  return [...Array(n).keys()].map(i => ({
+    id: i,
+    color: randomColor(),
+    data: randomPoints(m),
+  }))
 }
 
 const randomArrayItem = array => {

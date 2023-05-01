@@ -3,7 +3,7 @@ import {
   randomColor,
   randomCycle,
   randomGrid,
-  randomPoints,
+  randomData,
   randomAdvisory,
   randomInstance,
   randomStormName,
@@ -30,10 +30,9 @@ const layerGenerator = n => {
     advisory:   randomAdvisory(),
     stormName:  randomStormName(),
     instance:   randomInstance(),
-    data:       randomPoints(10),
+    data:       randomData(20, 24),
   }))
 }
 
 
 export const dummyLayers = layerGenerator(100)
-console.table(dummyLayers)
