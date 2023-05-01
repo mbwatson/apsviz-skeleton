@@ -27,7 +27,7 @@ export const LayersProvider = ({ children }) => {
     setSelectedLayerIds(new Set([...newSelectedLayerIds]))
     setVisibleLayerIds(new Set([...newVisibleLayerIds]))
   }
-  const selectedLayers = useMemo(() => layers.filter(layer => layerIsSelected(layer.id), [selectedLayerIds]))
+  const selectedLayers = useMemo(() => layers.filter(layer => layerIsSelected(layer.id)), [selectedLayerIds])
 
   // layer visibility
   const layerIsVisible = layerId => visibleLayerIds.has(layerId)
