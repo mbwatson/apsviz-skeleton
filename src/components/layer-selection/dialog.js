@@ -26,7 +26,9 @@ export const SelectionDialog = () => {
       maxWidth="sm"
       PaperProps={{ sx: {
         minHeight: '400px',
-        '.MuiDialogContent-root': { // scrolling the results instead, so don't scroll dialog content container
+        '.MuiDialogContent-root': {
+          // because we're scrolling the results instead,
+          // we don't want scrolling in the dialog content container.
           overflowY: 'hidden',
         }
       } }}

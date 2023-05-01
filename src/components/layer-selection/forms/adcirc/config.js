@@ -15,6 +15,15 @@ export const options = {
   stormName: stormNameOptions,
 }
 
+export const defaults = {
+  advisory: '',
+  cycle: '',
+  date: '',
+  grid: '',
+  instance: '',
+  stormName: '',
+}
+
 export const tropicalSchema = yup.object().shape({
   date: yup
     .date()
@@ -32,15 +41,6 @@ export const tropicalSchema = yup.object().shape({
     .oneOf(options.instance)
     .required('Please select an instance.'),
 })
-
-export const defaults = {
-  cycle: '',
-  date: '',
-  grid: '',
-  instance: '',
-  stormName: '',
-  advisory: '',
-}
 
 export const synopticSchema = yup.object().shape({
   stormName: yup
