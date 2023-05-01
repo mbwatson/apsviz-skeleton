@@ -1,51 +1,85 @@
-import { Box, Slider, Stack, Tab, Tabs, Typography } from '@mui/material'
+import { useState } from 'react'
+import { Box, Divider, Stack, Tab, Tabs, Typography } from '@mui/material'
+import {
+  Settings as ConfigIcon,
+  Info as DetailsIcon,
+  SsidChart as GraphIcon,
+} from '@mui/icons-material'
 import { useLayers } from '../../../context'
-import { GeneralDetails } from './general-details'
+import { ConfigTab, DetailsTab, GraphTab } from './tabs'
 
 //
 
-export const ActiveLayerDetails = () => {
-  const { activeLayer, getLayerOpacity, setLayerOpacity } = useLayers()
+const TABS = [
+  {
+    id: 'details',
+    label: 'Details',
+    tabIcon: <DetailsIcon />,
+    component: <DetailsTab />,
+  },
+  {
+    id: 'graph',
+    label: 'Graph',
+    tabIcon: <GraphIcon />,
+    component: <GraphTab />,
+  },
+  {
+    id: 'config',
+    label: 'Config',
+    tabIcon: <ConfigIcon />,
+    component: <ConfigTab />,
+  },
+]
 
-  const handleChangeOpacity = (event, value) => {
-    setLayerOpacity(activeLayer.id, value)
+function a11yProps(id) {
+  return {
+    id: `details-tab-${ id }`,
+    'aria-controls': `details-tab-panel-${ id }`,
+  };
+}
+
+export const ActiveLayerDetails = () => {
+  const [currentTabIndex, setCurrentTabIndex] = useState(0)
+  const { activeLayer } = useLayers()
+
+  const handleClickTab = (event, newTabIndex) => {
+    setCurrentTabIndex(newTabIndex)
   }
 
   return (
     <Stack
-      direction="row"
       alignItems="stretch"
       sx={{
         height: '100%',
         overflow: 'hidden',
-        '.main-content': {
-          margin: 0,
-          overflowY: 'auto',
-          flex: 1,
-          p: 1,
-        },
-        '.slider-container': {
-          backgroundColor: 'lightgrey',
-          height: '100%',
-          padding: '1rem 0'
-        }
+        '.MuiTab-root': { py: 0, px: 2 }
       }}
     >
-      <pre className="main-content">
-        { JSON.stringify(activeLayer, null, 2) }
-      </pre>
-      <Box className="slider-container">
-        <Slider
-          aria-label="Opacity"
-          orientation="vertical"
-          step={ 0.01 }
-          min={ 0.0 }
-          max={ 1.0 }
-          valueLabelFormat={ x => `Opacity: ${ x }%` }
-          valueLabelDisplay="auto"
-          value={ getLayerOpacity(activeLayer.id) }
-          onChange={ handleChangeOpacity }
-        />
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Typography variant="h6" sx={{ pl: 2 }}>{ activeLayer.name }</Typography>
+        <Tabs
+          value={currentTabIndex}
+          onChange={handleClickTab}
+          aria-label="Layer details tab selection"
+        >
+          {
+            TABS.map(({ id, label, tabIcon }) => (
+              <Tab
+                key={ `details-tab-${ label }` }
+                label={ label }
+                { ...a11yProps(id) }
+                icon={ tabIcon }
+                iconPosition="start"
+              />
+            ))
+          }
+        </Tabs>
+      </Stack>
+
+      <Divider />
+
+      <Box sx={{ height: '100%', overfow: 'hidden' }}>
+        { TABS[currentTabIndex].component }
       </Box>
     </Stack>
   )
