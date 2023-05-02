@@ -4,13 +4,11 @@ import { useLayers } from '../../../../context'
 import { LineGraph } from '../../../graph'
 
 export const GraphTab = () => {
-  const { activeLayer } = useLayers()
-
-  console.log(activeLayer.data)
+  const { activeLayer, activeLayerDatasets } = useLayers()
 
   const data = useMemo(() => {
-    return activeLayer?.data || []
-  }, [activeLayer])
+    return activeLayerDatasets.map(index => activeLayer.data[index]) || []
+  }, [activeLayer, activeLayerDatasets])
 
   return (
     <Box sx={{ height: '294px' }}>

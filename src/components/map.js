@@ -1,20 +1,26 @@
-import { Box } from '@mui/material'
+import { Box, Card, Chip, Divider } from '@mui/material'
 import { useLayers } from '../context'
 
 //
 
-const stringifyReplacer = (key, value) => {
-  if (key === 'data') {
-    return 'OMITTED FOR SPACE'
-  }
-  return value
-}
+const keysToExtract = [
+  'id', 'name', 'opacity', 'color', 'date',
+  'cycle', 'grid', 'advisory', 'stormName', 'instance',
+]
 
 export const BaseMap = () => {
-  const { visibleLayers, setActiveLayerId } = useLayers()
+  const {
+    visibleLayers, activeLayerId, setActiveLayerId,
+    activeLayerDatasets, toggleActiveLayerDataset,
+  } = useLayers()
+
+  const handleClickDataset = datasetIndex => event => {
+    console.log(datasetIndex, event)
+    toggleActiveLayerDataset(datasetIndex)
+  }
 
   return (
-    <Box sx={{
+    <Card sx={{
       minHeight: '100vh',
       minWidth: '100vw',
       overflow: 'hidden',
@@ -36,34 +42,61 @@ export const BaseMap = () => {
         alignItems: 'center',
         color: '#0001',
       },
+      '.layer': {
+        position: 'absolute',
+        top: '15%',
+        left: '25%',
+        border: 'solid #444',
+        transition: 'transform 250ms, border-color 250ms',
+        cursor: 'pointer',
+        '&:hover': {
+          borderColor: 'crimson',
+        },
+        '.info': { p: 1 },
+        '.datasets': {
+          p: 1,
+          maxWidth: '400px',
+          textAlign: 'center',
+          '.MuiChip-root': { p: 0.5, m: 0.25 },
+        },
+      },
     }}>
       {
-        visibleLayers.map((layer, i) => (
-          <Box
-            key={ `map-layer-${ layer.id }` }
-            component="pre"
-            onClick={ () => setActiveLayerId(layer.id) }
-            sx={{
-              filter: `opacity(${ layer.opacity })`,
-              position: 'absolute',
-              top: '15%',
-              left: '25%',
-              backgroundColor: layer.color,
-              border: 'solid #444',
-              padding: '8px',
-              transform: `perspective(1000px) translate3d(${(i + 1) * 3}rem, ${(i + 1) * 2}rem, 0) rotateX(-30deg) rotateY(30deg)`,
-              transition: 'transform 250ms, border-color 250ms',
-              cursor: 'pointer',
-              '&:hover': {
-                borderColor: 'crimson',
-              },
-            }}
-          >
-            { JSON.stringify(layer, stringifyReplacer, 2) }
-          </Box>
-        ))
+        visibleLayers
+          .sort((l, m) => l.order - m.order)
+          .map((layer, i) => (
+            <Box
+              key={ `map-layer-${ layer.id }` }
+              onClick={ () => setActiveLayerId(layer.id) }
+              className="layer"
+              sx={{
+                filter: `opacity(${ layer.opacity })`,
+                backgroundColor: layer.color,
+                transform: `perspective(1000px) translate3d(${(i + 1) * 3}rem, ${(i + 1) * 2}rem, 0) rotateX(-30deg) rotateY(30deg)`,
+              }}
+            >
+              <pre className="info">{ JSON.stringify(layer, keysToExtract, 2) }</pre>
+              <Divider />
+              <Box className="datasets">
+                {
+                  layer.data.map((dataset, i) => (
+                    <Chip
+                      key={ `layer-${ layer.id }-dataset-${ i }` }
+                      label={ i }
+                      variant={
+                        activeLayerId === layer.id && activeLayerDatasets.includes(i)
+                          ? 'outlined' : 'contained'
+                      }
+                      onClick={ handleClickDataset(i) }
+                    />
+                  ))
+                }
+              </Box>
+
+            </Box>
+          ))
       }
-    </Box>
+    </Card>
   )
 }
 

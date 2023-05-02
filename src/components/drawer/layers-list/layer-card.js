@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { Card, CardActionArea, CardActions, IconButton, Typography } from '@mui/material'
+import {
+  Card, CardActions, CardContent, IconButton
+} from '@mui/material'
 import {
   Close as CloseIcon,
   ChevronRight as InspectIcon,
@@ -21,6 +23,13 @@ export const LayerCard = ({ id, title }) => {
       color: currentlyActive ? '#000c' : '#fffc',
       transition: 'background-color 250ms, color 500ms',
       display: 'flex',
+      '.layer-name': {
+        flex: 1,
+        p: 0, pl: 2,
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+      },
       '.actions': {
         padding: 0,
         gap: 0,
@@ -47,19 +56,9 @@ export const LayerCard = ({ id, title }) => {
           <DeselectIcon color="disabled" fontSize="small" className="selection-icon" />
         </IconButton>
       </CardActions>
-      <CardActionArea
-        className="actionArea"
-        onClick={ () => currentlyActive ? setActiveLayerId(null) : setActiveLayerId(id) }
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '0.5rem',
-          px: 1,
-        }}
-      >
-        <Typography>{ title }</Typography>
+      <CardContent className="layer-name">{ title }</CardContent>
+      <CardActions>
+        <IconButton onClick={ () => currentlyActive ? setActiveLayerId(null) : setActiveLayerId(id) }>
         {
           currentlyActive ? (
               <CloseIcon color="warning" fontSize="small" />
@@ -67,7 +66,9 @@ export const LayerCard = ({ id, title }) => {
               <InspectIcon />
           )
         }
-      </CardActionArea>
+        </IconButton>
+        
+      </CardActions>
     </Card>
   )
 }

@@ -15,7 +15,7 @@ const DRAWER_MAX_HEIGHT = '400px'
 export const Drawer = () => {
   const theme = useTheme();
   const { closeDrawer, drawerIsOpen, toggleDrawer } = useLayout();
-  const { activeLayerId, selectedLayers } = useLayers()
+  const { activeLayer, layerSelection } = useLayers()
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
@@ -48,11 +48,12 @@ export const Drawer = () => {
         '.content': {
           height: '100%',
           paddingTop: TOGGLER_HEIGHT,
+          flex: 1,
           '.layers-list': {
             backgroundColor: 'slategrey',
             maxHeight: DRAWER_MAX_HEIGHT,
             position: 'relative',
-            flex: '0 0 300px',
+            flex: '0 0 400px',
           },
           '.layers-details': {
             backgroundColor: 'azure',
@@ -68,15 +69,18 @@ export const Drawer = () => {
         className="toggler"
         color="primary"
         variant="contained"
-      >- { selectedLayers.length } layers selected -</Button>
+      >- { layerSelection.length } layers selected -</Button>
       
-      <Stack direction={{ xs: 'column', md: 'row' }} className="content">
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        className="content"
+      >
         <Box className="layers-list">
           <LayersList />
         </Box>
         <Box xs={12} md={9} className="layers-details">
           {
-            activeLayerId
+            activeLayer
               ? <ActiveLayerDetails />
               : <GeneralDetails />
           }

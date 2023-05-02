@@ -4,7 +4,7 @@ import { useLayers } from '../../../context'
 //
 
 export const GeneralDetails = () => {
-  const { selectedLayers, visibleLayers } = useLayers()
+  const { layerSelection, visibleLayers } = useLayers()
   return (
     <Box sx={{
       display: 'flex',
@@ -14,7 +14,7 @@ export const GeneralDetails = () => {
       height: '100%',
     }}>
       <Typography paragraph>
-        selected layers: { selectedLayers.length }
+        selected layers: { Object.keys(layerSelection).length }
       </Typography>
       <Typography paragraph>
         visible layers: { visibleLayers.length }

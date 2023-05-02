@@ -1,90 +1,109 @@
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, { createContext, useContext, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { dummyLayers } from '../data'
 
-export const LayersContext = createContext({});
+export const LayersContext = createContext({})
 
-export const useLayers = () => useContext(LayersContext);
+export const useLayers = () => useContext(LayersContext)
 
 export const LayersProvider = ({ children }) => {
   const [layers, setLayers] = useState([...dummyLayers])
-  const [selectedLayerIds, setSelectedLayerIds] = useState(new Set())
-  const [visibleLayerIds, setVisibleLayerIds] = useState(new Set())
+  const [layerSelection, setLayerSelection] = useState({ })
   const [activeLayerId, setActiveLayerId] = useState(null)
+  const [activeLayerDatasets, setActiveLayerDatasets] = useState([])
 
   // layer selection
-  const layerIsSelected = layerId => selectedLayerIds.has(layerId)
+  const layerIsSelected = layerId => layerId in layerSelection
   const toggleLayerSelection = layerId => {
-    let newSelectedLayerIds = new Set([...selectedLayerIds])
-    let newVisibleLayerIds = new Set([...visibleLayerIds])
-    if (newSelectedLayerIds.has(layerId)) {
-      newSelectedLayerIds.delete(layerId)
-      newVisibleLayerIds.delete(layerId)
+    let newLayerSelection = { ...layerSelection }
+    if (layerIsSelected(layerId)) {
+      delete newLayerSelection[layerId]
     } else {
-      newSelectedLayerIds.add(layerId)
-      newVisibleLayerIds.add(layerId)
+      const newlySelectedLayer = layers.find(layer => layer.id === layerId)
+      // notice the additional properties we're
+      // tacking onto selected layer objects.
+      const layerProperties = {
+        order: Object.keys(newLayerSelection).length,
+        visible: true,
+        opacity: 1.0,
+      }
+      newLayerSelection[layerId] = {
+        ...newlySelectedLayer,
+        ...layerProperties,
+      }
     }
-    setSelectedLayerIds(new Set([...newSelectedLayerIds]))
-    setVisibleLayerIds(new Set([...newVisibleLayerIds]))
+    setLayerSelection({ ...newLayerSelection })
   }
-  const selectedLayers = useMemo(() => layers.filter(layer => layerIsSelected(layer.id)), [selectedLayerIds])
 
   // layer visibility
-  const layerIsVisible = layerId => visibleLayerIds.has(layerId)
+  const layerIsVisible = layerId => layerIsSelected(layerId) && layerSelection?.[layerId]?.visible
   const toggleLayerVisibility = layerId => {
-    let newVisibleLayerIds = new Set([...visibleLayerIds])
-    if (newVisibleLayerIds.has(layerId)) {
-      newVisibleLayerIds.delete(layerId)
-    } else {
-      newVisibleLayerIds.add(layerId)
+    let newLayerSelection = { ...layerSelection }
+    if (!(layerId in newLayerSelection)) {
+      return
     }
-    setVisibleLayerIds(new Set([...newVisibleLayerIds]))
+    newLayerSelection[layerId].visible = !newLayerSelection[layerId].visible
+    setLayerSelection({ ...newLayerSelection })
   }
-  const visibleLayers = useMemo(() => layers.filter(layer => layerIsVisible(layer.id)), [visibleLayerIds])
+  const visibleLayers = useMemo(() => {
+    return Object.values(layerSelection)
+      .filter(layer => layerIsVisible(layer.id))
+  }, [layerSelection])
+
+  // layer order
+  const swapLayers = (layerId1, layerId2) => {
+    let newLayerSelection = { ...layerSelection }
+    const tempOrder = newLayerSelection[layerId1].order
+    newLayerSelection[layerId1].order = newLayerSelection[layerId2].order
+    newLayerSelection[layerId2].order = tempOrder
+    setLayerSelection({ ...newLayerSelection })
+  }
 
   // layer activity
   const activeLayer = useMemo(() => {
-    const index = layers.findIndex(layer => layer.id === activeLayerId)
-    if (index < 0) {
-      return null
-    }
-    return layers[index]
+    setActiveLayerDatasets([])
+    return layerSelection?.[activeLayerId]
   }, [activeLayerId])
+  const toggleActiveLayerDataset = datasetIndex => {
+    const newDatasetIndices = new Set([...activeLayerDatasets])
+    if (newDatasetIndices.has(datasetIndex)) {
+      newDatasetIndices.delete(datasetIndex)
+    } else {
+      newDatasetIndices.add(datasetIndex)
+    }
+    setActiveLayerDatasets([...newDatasetIndices])
+  }
 
   // opacity
   const getLayerOpacity = layerId => {
-    const index = layers.findIndex(layer => layer.id === layerId)
-    if (index < 0) {
-      return undefined
-    }
-    return layers[index].opacity
+    return layerSelection?.[layerId]?.opacity ?? '1.0'
   }
 
   const setLayerOpacity = (layerId, newOpacity) => {
-    const index = layers.findIndex(layer => layer.id === layerId)
-    if (index < 0) {
+    const newLayerSelection = { ...layerSelection }
+    if (!(layerId in newLayerSelection)) {
       return
     }
-    let newLayers = [...layers]
-    newLayers[index].opacity = newOpacity
-    setLayers(newLayers)
+    newLayerSelection[layerId].opacity = newOpacity
+    setLayers({ ...newLayerSelection })
   }
-  
+
   return (
     <LayersContext.Provider
       value={{
         layers,
         visibleLayers, layerIsVisible, toggleLayerVisibility,
         activeLayer, activeLayerId, setActiveLayerId,
+        activeLayerDatasets, toggleActiveLayerDataset,
         getLayerOpacity, setLayerOpacity,
-        selectedLayers, selectedLayerIds, setSelectedLayerIds, layerIsSelected, toggleLayerSelection,
+        swapLayers,
+        layerSelection, setLayerSelection, layerIsSelected, toggleLayerSelection,
       }}
     >
       {children}
     </LayersContext.Provider>
-  );
-};
-
+  )
+}
 
 LayersProvider.propTypes = {
   children: PropTypes.node,
