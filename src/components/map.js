@@ -14,8 +14,7 @@ export const BaseMap = () => {
     activeLayerDatasets, toggleActiveLayerDataset,
   } = useLayers()
 
-  const handleClickDataset = datasetIndex => event => {
-    console.log(datasetIndex, event)
+  const handleClickDataset = datasetIndex => () => {
     toggleActiveLayerDataset(datasetIndex)
   }
 
@@ -63,7 +62,7 @@ export const BaseMap = () => {
     }}>
       {
         visibleLayers
-          .sort((l, m) => l.order - m.order)
+          .sort((l, m) => m.order - l.order)
           .map((layer, i) => (
             <Box
               key={ `map-layer-${ layer.id }` }
@@ -83,9 +82,9 @@ export const BaseMap = () => {
                     <Chip
                       key={ `layer-${ layer.id }-dataset-${ i }` }
                       label={ i }
-                      variant={
+                      color={
                         activeLayerId === layer.id && activeLayerDatasets.includes(i)
-                          ? 'outlined' : 'contained'
+                          ? 'primary' : 'default'
                       }
                       onClick={ handleClickDataset(i) }
                     />
